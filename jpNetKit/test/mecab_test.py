@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from src.api.jp.mecab import MeCab
+from jpNetKit.mecab import MeCab
 
 
 class TestMeCab:
@@ -9,14 +9,14 @@ class TestMeCab:
     def test_can_get_sentence_reading_in_hiragana(self):
         """Test that we can get correct sentence reading"""
         assert (
-            MeCab().reading(u'来週からテストが始まる。') ==
+            MeCab().get_reading(u'来週からテストが始まる。') ==
             u'らいしゅうからてすとがはじまる。'
         )
 
     def test_can_get_sentence_reading_in_katakana(self):
         """Test that we can get correct sentence reading without conversion"""
         assert (
-            MeCab().reading(u'来週からテストが始まる。', hiragana=False) ==
+            MeCab().get_reading(u'来週からテストが始まる。', hiragana=False) ==
             u'ライシュウカラテストガハジマル。'
         )
 
@@ -36,4 +36,4 @@ class TestMeCab:
 
     def test_can_get_single_kanji_reading(self):
         """Test that we can get single kanji reading"""
-        assert MeCab().reading(u'音') == u'おと'
+        assert MeCab().get_reading(u'音') == u'おと'

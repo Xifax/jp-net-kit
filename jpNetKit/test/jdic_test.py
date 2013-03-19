@@ -1,27 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from lettuce import (
-        step,
-        world,
-)
+from jpNetKit.jdic import JDic
 
-from src.jp.jdic import JDic
 
-@step('I have the sentence "(.*)"')
-def have_the_sentence(step, sentence):
-    world.sentence = unicode(sentence)
+class TestJDic:
+    """Test JDic"""
 
-@step('I query JDic API')
-def query_jdic_api(step):
-    world.response = JDic().lookup(world.sentence)
-
-@step('I get (\d+) translated terms')
-def get_list_of_three(step, expected):
-    assert len(world.response) == int(expected), \
-        "Got %d" % len(world.response)
-
-@step('All translated terms are found in original sentence')
-def all_terms_exist(step):
-    for key in world.response.keys():
-        assert key in world.sentence
+    def test_can_translate_words_in_sentence(self):
+        """Test that we can translate sentence word by word"""
+        sentence = u'体を癒すために。'
+        translations = JDic().lookup(sentence)
+        assert len(translations) == 3
+        for key in translations.keys():
+            assert key in sentence

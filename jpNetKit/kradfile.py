@@ -6,8 +6,7 @@ from os import remove
 from pickle import loads, dumps
 from tempfile import NamedTemporaryFile, gettempdir
 
-import requests
-from requests import RequestException
+from requests import get, RequestException
 
 
 class Kradfile:
@@ -23,7 +22,7 @@ class Kradfile:
     def get_kradfile(self):
         """Get Kradfile-u"""
         try:
-            return requests.get(self.url).content
+            return get(self.url).content
         except RequestException:
             return ''
 

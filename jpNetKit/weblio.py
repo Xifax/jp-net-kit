@@ -1,16 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-    Weblio API(as if) consumer
-"""
-
-import requests
-from requests import RequestException
+from requests import get, RequestException
 from bs4 import BeautifulSoup
 
 
 class Weblio:
+
+    """
+        Weblio API(as if) consumer
+    """
 
     def __init__(self):
         #self.definition_url = 'http://www.weblio.jp/content/%s'
@@ -47,11 +46,10 @@ class Weblio:
         :returns:       list of touples (example, translation)
         """
         data = self.process(self.examples_url, term)
-        examples = []
+        examples = [] if tuples else {}
         if data:
             #for example in data.find_all('div', 'qotC')[-number:]:
             total = data.find_all('div', 'qotC')
-            print len(total)
             n = len(total) / portion
             # Let's take examples from the middle (TODO: golden ratio?)
             for example in total[n: n + number]:
@@ -65,14 +63,16 @@ class Weblio:
                 if tuples:
                     examples.append((sentence, translation))
                 else:
-                    examples.append({sentence: translation})
+                    #examples.append(
+                        #{'example': sentence, 'translation': translation}
+                    #)
+                    examples[sentence] = translation
 
         return examples
 
     def process(self, url, term):
         try:
-            # Use lxml instead of HTMLParser (2.7.2 is bad with malformed tags)
-            return BeautifulSoup(requests.get(url % term).text, 'lxml')
+            return BeautifulSoup(get(url % term).text, 'lxml')
         except RequestException:
             return None
 
@@ -82,34 +82,3 @@ class Weblio:
             line = line.split(s)[0]
         return line.strip()
 
-
-def local_run():
-    """Cosole utility stub"""
-    output = open('/home/yadavito/Desktop/test2_export.txt', 'w')
-    export = []
-    for line in open('/home/yadavito/Desktop/test2.txt'):
-        fields = line.split('\t')
-        term = fields[0]
-        weblio = Weblio()
-        examples = weblio.examples(term)
-        if examples:
-            example = weblio.examples(term).pop()
-        else:
-            example = u''
-        #print example
-        fields[0] = unicode(fields[0], 'utf-8')
-        fields[1] = unicode(fields[1], 'utf-8')
-        fields[2] = unicode(fields[2], 'utf-8')
-        fields[3] = example
-        export.append(fields)
-
-    print export
-    for line in export:
-        output.write(u'\t'.join(line).encode('utf-8'))
-        # OMG
-        output.write('\n')
-
-if __name__ == '__main__':
-    """Run as test script"""
-    Weblio().definition(u'唆す')
-    #local_run()

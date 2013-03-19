@@ -1,14 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-    JDict Web API consumer
-"""
-
-from requests import (
-    get,
-    RequestException,
-)
+from requests import get, RequestException
 from bs4 import BeautifulSoup
 
 
@@ -47,8 +40,3 @@ class JDic:
             ))
         except Exception:
             return None
-
-
-if __name__ == '__main__':
-    for key, value in JDic().lookup(u'体を癒すために。葬り去ろうと。今はただ、目を閉じて聞いておくれ。').items():
-        print key + ': ' + value + '\n'

@@ -15,7 +15,8 @@ setup(
     long_description=open('README.txt').read(),
     install_requires=[
         "Requests >= 1.1.0",
-        "beautifulsoup4 >= 4.1.3"
-        "jcconv   >= 0.2.3"
+        "beautifulsoup4 >= 4.1.3",
+        "jcconv   >= 0.2.3",
+        "lxml >= 2.3.6",
     ],
 )

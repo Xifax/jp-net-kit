@@ -1,12 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-    MeCab Web API consumer
-"""
-
-import requests
-from requests import RequestException
+from requests import get, RequestException
 from jcconv import kata2hira
 
 
@@ -21,29 +16,26 @@ class MeCab:
                     'sentence=%s&response=%s&format=json')
         # NB: nothing is included, by default
         self.options = []
-        self.stats = {}
 
-    def reading(self, sentence, hiragana=True):
+    def get_reading(self, sentence, hiragana=True):
         """
         Get reading for provided sentence|word
         NB: for some rare words there may be no readings available!
         """
-        self.include('pronounciation')
-        info = self.parse(sentence)
+        info = self.include('pronounciation').parse(sentence)
         if info:
-            kana = u''.join([
+            katakana = u''.join([
                 reading.get('pronounciation', '') for reading in info
                 if reading.get('pronounciation')
             ])
             if hiragana:
-                return kata2hira(kana)
-            return kana
+                return kata2hira(katakana)
+            return katakana
 
-    def wordByWord(self, sentence, hiragana=True):
+    def word_by_word(self, sentence, hiragana=True):
         """Get reading for every element in provided sentence"""
-        self.includeSurface().includeReading()
-        info = self.parse(sentence)
         words = []
+        info = self.include('pronounciation', 'surface').parse(sentence)
         if info:
             # Compile list of {word: reading} excluding okurigana and and so on
             for word in info:
@@ -67,11 +59,9 @@ class MeCab:
 
         return words
 
-    def partOfSpeech(self, term):
+    def part_of_speech(self, term):
         """Get term type"""
-        self.includePartOfSpeech()
-        self.includeBaseForm()
-        info = self.parse(term)
+        info = self.include('pos', 'baseform').parse(term)
         if info:
             if len(info) == 1:
                 # TODO: should really PARSE this stuff, as it gets ugly
@@ -87,47 +77,13 @@ class MeCab:
     def parse(self, sentence):
         """Query MeCab to parse sentence|word"""
         try:
-            return requests.get(
+            return get(
                 self.url % (sentence, ','.join(self.options))
-            ).json
+            ).json()
         except RequestException:
             return None
 
-    def include(self, options):
-        """Specify, which responce elements should be included"""
-        self.options = options
-
-    def includeReading(self):
-        """Include reading in response"""
-        if 'pronounciation' not in self.options:
-            self.options.append('pronounciation')
-        return self
-
-    def includeSurface(self):
-        """Include surface in response"""
-        if 'surface' not in self.options:
-            self.options.append('surface')
-        return self
-
-    def includeFeature(self):
-        """Include feature in response"""
-        if 'feature' not in self.options:
-            self.options.append('feature')
-        return self
-
-    def includePartOfSpeech(self):
-        """Include pronounciation in response"""
-        if 'pos' not in self.options:
-            self.options.append('pos')
-        return self
-
-    def includeBaseForm(self):
-        """Include baseform in response"""
-        if 'baseform' not in self.options:
-            self.options.append('baseform')
-        return self
-
-    def include(self, option):
+    def include(self, *args):
         """
         Include specified option in response
         Options available:
@@ -137,8 +93,8 @@ class MeCab:
             * 'inflection',       : type and form of inflection
             * 'baseform',         : baseform of the word
             * 'pronounciation'    : word pronounciation
-        TODO: use kwargs of arguments
         """
-        if option not in self.options:
-            self.options.append(option)
+        for option in args:
+            if option not in self.options:
+                self.options.append(option)
         return self
