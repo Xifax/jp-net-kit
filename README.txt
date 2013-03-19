@@ -9,7 +9,7 @@ Rough TODOism:
 
 1. MeCab API consumer (simplest one, actually provides API);
 2. JDict (requires some html parsing, partial implementation for jp2en should be enough);
-3. Kradfile-u (also very simple and quite useful);
+3. Kradfile-u (also very simple and quite useful) [done];
 4. Wordnik (autocomplete, glossary, related terms);
 5. Weblio (examples with jp2en translation)
 6. Kotobank?
@@ -18,9 +18,10 @@ Rough TODOism:
 
 Possible dependencies:
 
-1. Requests
-2. Kata2hira
-3. MessagePack?
+1. Requests [yes]
+2. Kata2hira [yes]
+3. BeautifulSoup [yes]
+4. MessagePack?
 
 ---
 
