@@ -4,7 +4,7 @@ from jpnetkit.mecab import MeCab
 
 
 class TestMeCab:
-    """Detect language API test cases."""
+    """Test MeCab"""
 
     def test_can_get_sentence_reading_in_hiragana(self):
         """Test that we can get correct sentence reading"""

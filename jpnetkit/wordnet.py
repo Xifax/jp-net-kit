@@ -1,17 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-    Asian Wordnet API consumer
-    http://ja.asianwordnet.org/services/provide_list
-    NB: service is unresponsive sometimes
-"""
+from requests import get, RequestException
 
-import requests
-from requests import RequestException
-from mecab import MeCab
 
 class Wordnet:
+
+    """
+        Asian Wordnet API consumer
+        http://ja.asianwordnet.org/services/provide_list
+        NB: service has quota!
+    """
 
     def __init__(self):
         """Setup request url and default request options"""
@@ -19,35 +18,35 @@ class Wordnet:
         self.base = 'http://ja.asianwordnet.org/services/%s/json/'
         # Available services
         self.services = {
-                'dictionary': 'ja2en/%s',               # word
-                'autocomplete': 'ja/%s',                # incomplete term
-                'browse': 'ja/%s',                      # word
-                'browse_related': 'ja/%s/%s/%s/%s',     # word, synset offset, relation
-                'sense': '%s/%s',                       # pos, synset offset
+            'dictionary':       'ja2en/%s',         # word
+            'autocomplete':     'ja/%s',            # incomplete term
+            'browse':           'ja/%s',            # word
+            'browse_related':   'ja/%s/%s/%s/%s',   # word, synset offset, relation
+            'sense':            '%s/%s',            # pos, synset offset
         }
         # Semantic relations
         self.relations = [
-                'ANTONYM',
-                # denotes a more specific term, a subordinate grouping
-                # "dog" is hyponym of "animal"
-                'HYPONYM',
-                # denotes superordinate term
-                # "musical instrument" is a hypernym of "guitar"
-                'HYPERNYM',
-                # denotes a whole, whose part is denoted by another term
-                # "word" is a holonym of "letter"
-                'HOLONYM',
-                # denotes a part of the whole, that is denoted by another term
-                # "arm" is a meronym of "body"
-                'MERONYM',
+            'ANTONYM',
+            # denotes a more specific term, a subordinate grouping
+            # "dog" is hyponym of "animal"
+            'HYPONYM',
+            # denotes superordinate term
+            # "musical instrument" is a hypernym of "guitar"
+            'HYPERNYM',
+            # denotes a whole, whose part is denoted by another term
+            # "word" is a holonym of "letter"
+            'HOLONYM',
+            # denotes a part of the whole, that is denoted by another term
+            # "arm" is a meronym of "body"
+            'MERONYM',
         ]
         # Parts of speech
         self.pos = {
-                'noun'      : 'n',
-                'verb'      : 'v',
-                'adjective' : 'a',
-                'adverb'    : 'r',
-                's'         : 's',
+            'noun':      'n',
+            'verb':      'v',
+            'adjective': 'a',
+            'adverb':    'r',
+            's':         's',  # what is this, I don't know
         }
 
     def query(self, service, params):
@@ -55,9 +54,9 @@ class Wordnet:
         Query specified Wordnet service with provided params.
         """
         try:
-            return requests.get(
+            return get(
                 self.base % service + self.services[service] % params
-            ).json
+            ).json()
         except RequestException:
             return None
 
@@ -89,7 +88,6 @@ class Wordnet:
         else:
             return []
 
-
     def complete(self, term):
         """
         Get autocomplete suggestions list for partial word.
@@ -112,7 +110,6 @@ class Wordnet:
         # otherwise return empty list
         else:
             return []
-
 
     def browse(self, word):
         """
@@ -138,26 +135,3 @@ class Wordnet:
             if 'data' in results and 'rows' in results:
                 if results['rows'] > 0:
                     return True
-
-
-if __name__ == '__main__':
-    """Run as test script"""
-    kanji = u'脅'
-    #kanji = u'嚇'
-    wn = Wordnet()
-    mecab = MeCab()
-    # 0. Autocomplete kanji
-    words = wn.complete(kanji)
-    # 1. Lookup each of the words
-    if words:
-        for word in words:
-            # 1.1. Get reading for each word
-            print word, mecab.reading(word), '\n'
-            # 1.2. Lookup word definitions and related words
-            results = wn.lookup(word)
-            if results:
-                for result in results:
-                    print 'Meaning: ', result['gloss']
-                    print 'Similar words: ', result['translate'], '\n'
-                print '\n'
-
