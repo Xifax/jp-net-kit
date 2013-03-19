@@ -66,6 +66,8 @@ class Wordnet:
         Resulting list will be sorted by provided priority ranks (row numbers).
         NB: may not find kanji by themselves!
 
+        TODO: include specific fields to get (e.g., lookup gloss and so on)
+
         Each word contains following fields:
             'gloss'     : english translation
             'translate' : similar words in japanese
