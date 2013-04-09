@@ -56,15 +56,15 @@ class Kit:
         results = {}
         for arg in args:
             if 'reading' == arg:
-                results[arg] = self.get_reading_of(term)
+                results[arg] = self.get_reading(term)
             if 'radikals' == arg:
-                results[arg] = self.get_radikals_for(term)
+                results[arg] = self.get_radikals(term)
             if 'translation' == arg:
                 results[arg] = self.translate(term)
             if 'completion' == arg:
                 results[arg] = self.compelete(term)
             if 'examples' == arg:
-                results[arg] = self.get_examples_for(term)
+                results[arg] = self.get_examples(term)
 
         if len(results) == 1:
             return results.itervalues().next()

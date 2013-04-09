@@ -24,7 +24,7 @@ Will output reading, translation and found examples:
 
 ```
 ~ translation ~
-テスト ->  テスト 	(n,vs) test; (P); ED
+テスト ->  テスト   (n,vs) test; (P); ED
 ------------------
 ~ reading ~
 てすと
@@ -43,4 +43,7 @@ SynchronousSampleApplication のテスト -> Testing the SynchronousSampleApplic
 * JDic;
 * Kradfile
 * Weblio;
+* Jisho;
 * Wordnet.
+
+Peruse available tests to grok api for each of the consumer.
