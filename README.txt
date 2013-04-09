@@ -5,14 +5,19 @@ jp-net-kit
 Collection of utilities, dedictated for consuming following services:
 
 * MeCab;
+
 * JDic;
+
 * Kradfile
+
 * Weblio;
+
 * Jisho;
+
 * Wordnet.
 
 
-Example usage:
+Example usage::
 
     #!/usr/bin/env python
     # encoding: utf-8
