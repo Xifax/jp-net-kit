@@ -17,11 +17,11 @@ class Kit:
         self.jdic, self.krad, self.mecab, self.weblio, self.wordnet =\
             JDic(), Kradfile(), MeCab(), Weblio(), Wordnet()
 
-    def get_reading_of(self, term):
+    def get_reading(self, term):
         """Get reading for kanji|word|sentence"""
         return self.mecab.get_reading(term)
 
-    def get_radikals_for(self, kanji):
+    def get_radikals(self, kanji):
         """Get radikal decomposition for kanji"""
         return self.kradfile.get_radikals_for(kanji)
 
@@ -33,7 +33,7 @@ class Kit:
         """Autocomplete kanji|word"""
         return self.wordnet.complete(term)
 
-    def get_examples_for(self, word):
+    def get_examples(self, word):
         """Get example usages with english translation for word"""
         return self.weblio.examples(word)
 
