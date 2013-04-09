@@ -11,7 +11,7 @@ setup(
     url='http://pypi.python.org/pypi/jp-net-kit/',
     license='LICENSE.txt',
     description='jp2en web services api collection',
-    long_description=open('README.txt').read(),
+    long_description=open('README.rst').read(),
     install_requires=[
         "Requests >= 1.1.0",
         "beautifulsoup4 >= 4.1.3",
