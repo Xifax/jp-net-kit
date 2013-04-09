@@ -36,3 +36,6 @@ nosetests.xml
 
 # Environments
 venv
+
+# Manifest file
+MANIFEST
